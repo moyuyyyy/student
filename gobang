@@ -1,0 +1,177 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+int arr[15][15]={};
+int x=0,y=0;
+
+int cnt=1;//判断该回合是黑棋还是白棋，落子之后cnt+1
+			//开局落子，cnt为2。则该落子为白棋，然后判断是否有五子连珠
+bool win=false;//游戏是否结束的标志，true时结束
+void rand_a(void);//棋盘
+void show(void);//展示棋盘，落下一次则更新一次
+void play(void);//白棋先手，黑棋后手，依次下棋
+void is_win(void);//判断是否出现五子连珠，有则程序结束，无则回到play函数交换选手
+
+int main()
+{
+	rand_a();
+	system("clear");
+	show();
+	while(1)
+	{
+		play();
+		system("clear");
+		show();
+		is_win();
+		if(win)
+		{
+			printf("游戏结束\n");
+			return 0;
+		}
+	}
+}
+
+void rand_a(void)
+{
+	for(int i=0;i<15;i++)
+	{
+		for(int j=0;j<15;j++)
+		{
+			arr[i][j]==0;
+		}
+	}
+}
+
+void show()
+{	
+	for(int i=0;i<15;i++)
+	{
+		for(int j=0;j<15;j++)
+		{
+			if(arr[i][j]==0)
+			{
+				printf("* ");
+			}
+			else if(arr[i][j]==1)
+			{
+				printf("@ ");
+			}
+			else if(arr[i][j]==2)
+			{
+				printf("$ ");
+			}
+		}
+		printf("\n");
+	}
+}
+
+void play(void)
+{
+	while(1)
+	{
+		scanf("%d%d",&x,&y);
+		if(x<1||x>15||y<1||y>15)
+		{
+			printf("位置错误，请重新选择\n");
+		}
+		else if(arr[x-1][y-1]==1||arr[x-1][y-1]==2)
+		{
+			printf("该位置有棋子，请重新选择\n");
+		}
+		else
+		{
+			cnt++;
+			break;
+		}
+	}
+	if(cnt%2==1)
+	{
+		arr[x-1][y-1]=1;
+	}
+	else if(cnt%2==0)
+	{
+		arr[x-1][y-1]=2;
+	}
+
+}
+
+void is_win(void)
+{
+	//查询某一行是否有五个
+	for(int i=0;i<15;i++)
+	{
+		for(int j=0;j<11;j++)
+		{
+			if(arr[i][j]==1&&arr[i][j+1]==1&&arr[i][j+2]==1&&arr[i][j+3]==1&&arr[i][j+4]==1)
+			{
+				printf("黑棋获胜\n");
+				win=true;
+				break;
+			}
+			if(arr[i][j]==2&&arr[i][j+1]==2&&arr[i][j+2]==2&&arr[i][j+3]==2&&arr[i][j+4]==2)
+			{
+				printf("白棋获胜\n");
+				win=true;
+				break;
+			}
+		}
+	}
+	//查询某一列是否有五个
+	for(int i=0;i<11;i++)
+	{
+		for(int j=0;j<15;j++)
+		{
+			if(arr[i][j]==1&&arr[i+1][j]==1&&arr[i+2][j]==1&&arr[i+3][j]==1&&arr[i+4][j]==1)
+			{
+				printf("黑棋获胜\n");
+				win=true;
+				break;
+			}
+			if(arr[i][j]==2&&arr[i+1][j]==2&&arr[i+2][j]==2&&arr[i+3][j]==2&&arr[i+4][j]==2)
+			{
+				printf("白棋获胜\n");
+				win=true;
+				break;
+			}
+		}
+	}
+	//查询右下斜线是否有五个
+	
+	for(int i=0;i<11;i++)
+	{
+		for(int j=0;j<11;j++)
+		{
+			if(arr[i][j]==1&&arr[i+1][j+1]==1&&arr[i+2][j+2]==1&&arr[i+3][j+3]==1&&arr[i+4][j+4]==1)
+			{
+				printf("黑棋获胜\n");
+				win=true;
+				break;
+			}
+			if(arr[i][j]==2&&arr[i+1][j+1]==2&&arr[i+2][j+2]==2&&arr[i+3][j+3]==2&&arr[i+4][j+4]==2)
+			{
+				printf("白棋获胜\n");
+				win=true;
+				break;
+			}
+		}
+	}
+	//查询左下斜线是否有五个
+	for(int i=0;i<11;i++)
+	{
+		for(int j=4;j<15;j++)
+		{
+			if(arr[i][j]==1&&arr[i+1][j-1]==1&&arr[i+2][j-2]==1&&arr[i+3][j-3]==1&&arr[i+4][j-4]==1)
+			{
+				printf("黑棋获胜\n");
+				win=true;
+				break;
+			}
+			if(arr[i][j]==2&&arr[i+1][j-1]==2&&arr[i+2][j-2]==2&&arr[i+3][j-3]==2&&arr[i+4][j-4]==2)
+			{
+				printf("白棋获胜\n");
+				win=true;
+				break;
+			}
+		}
+	}
+}
