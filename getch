@@ -1,0 +1,7 @@
+//按任意键继续
+void anykey(void)
+{
+	puts("按任意键继续");
+	stdin->_IO_read_ptr = stdin->_IO_read_end;
+	getch();
+}
